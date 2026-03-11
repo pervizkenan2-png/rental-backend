@@ -2,13 +2,16 @@
 // Landlord Lite – Backend
 // index.js
 // ================================
+require("dotenv").config();
 
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+
+const authRoutes = require("./routes/auth");
+const auth = require("./middleware/auth");
 
 const app = express();
-
 // ================================
 // CONFIG
 // ================================
@@ -20,7 +23,7 @@ const MONGO_URI = process.env.MONGO_URI;
 // ================================
 app.use(cors());
 app.use(express.json());
-
+app.use("/api/auth", authRoutes);
 // ================================
 // MONGODB CONNECT
 // ================================
@@ -40,8 +43,12 @@ mongoose
 // ================================
 // SCHEMA & MODEL
 // ================================
-const tenantSchema = new mongoose.Schema(
-  {
+const tenantSchema = new mongoose.Schema({
+userId: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "User",
+  required: true
+},
     name: { type: String, required: true },
     unit: { type: String, required: true },
     rent: { type: Number, required: true },
