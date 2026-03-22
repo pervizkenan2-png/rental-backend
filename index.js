@@ -45,7 +45,7 @@ app.get("/api/tenants/:id", auth, async (req, res) => {
       _id: req.params.id,
       userId: req.user.id
     });
-F
+
     if (!tenant) {
       return res.status(404).json({ error: "Mieter nicht gefunden" });
     }
@@ -60,10 +60,7 @@ F
 app.post("/api/tenants", auth, async (req, res) => {
   try {
     if (!req.user || !req.user.id) {
-      return res.status(401).json({
-        error: "AUTH FEHLT",
-        reqUser: req.user || null
-      });
+      return res.status(401).json({ error: "Nicht autorisiert" });
     }
 
     const tenant = new Tenant({
@@ -74,12 +71,10 @@ app.post("/api/tenants", auth, async (req, res) => {
     await tenant.save();
     res.status(201).json(tenant);
   } catch (err) {
-    res.status(400).json({
-      error: err.message,
-      reqUser: req.user || null
-    });
+    res.status(400).json({ error: err.message });
   }
 });
+
 
 // UPDATE Tenant
 app.patch("/api/tenants/:id", auth, async (req, res) => {
