@@ -3,15 +3,17 @@ const jwt = require("jsonwebtoken");
 module.exports = function (req, res, next) {
   const header = req.headers.authorization;
 
-  if (!header) return res.status(401).json({ error: "Kein Token" });
+  if (!header) {
+    return res.status(401).json({ error: "Kein Token" });
+  }
 
   const token = header.split(" ")[1];
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = { id: decoded.id };
+    req.user = { id: decoded.id || decoded.userId };
     next();
-  } catch {
-    res.status(401).json({ error: "Token ungültig" });
+  } catch (err) {
+    return res.status(401).json({ error: "Token ungültig" });
   }
 };

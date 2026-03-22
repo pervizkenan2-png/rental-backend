@@ -1,27 +1,40 @@
-// modelsTenant.js
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-// Schema für Mieter (Tenant)
 const tenantSchema = new mongoose.Schema({
-  name: { 
-    type: String, 
-    required: true              // 👤 Name ist Pflicht
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
   },
-  rentAmount: { 
-    type: Number, 
-    required: true              // 💶 Miete ist Pflicht
+  name: {
+    type: String,
+    required: true
   },
-  paid: { 
-    type: Boolean, 
-    default: false               // Standard: noch nicht bezahlt
+  unit: {
+    type: String,
+    required: true
   },
-  createdAt: { 
-    type: Date, 
-    default: Date.now            // Automatisch das Erstellungsdatum
+  rent: {
+    type: Number,
+    required: true
+  },
+  dueDay: {
+    type: Number,
+    required: true
+  },
+  iban: {
+    type: String,
+    default: ""
+  },
+  status: {
+    type: String,
+    enum: ["unpaid", "paid"],
+    default: "unpaid"
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
   }
 });
 
-// Modell erstellen
-const Tenant = mongoose.model('Tenant', tenantSchema);
-
-module.exports = Tenant;
+module.exports = mongoose.model("Tenant", tenantSchema);
