@@ -13,11 +13,13 @@ const Tenant = require("./modelsTenant");
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI;
+const repairRoutes = require("./routes/repairRoutes");
 
 app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/repairs", repairRoutes);
 
 app.get("/", (req, res) => {
   res.json({ status: "OK", app: "Landlord Lite Backend" });
